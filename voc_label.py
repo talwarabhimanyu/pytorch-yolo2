@@ -1,3 +1,8 @@
+"""
+Source: http://pjreddie.com/media/files/voc_label.py
+
+"""
+
 import xml.etree.ElementTree as ET
 import pickle
 import os
@@ -10,8 +15,13 @@ classes = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat"
 
 
 def convert(size, box):
+    # size[0] and size[1] are width and height
+    # of the image.
     dw = 1./size[0]
     dh = 1./size[1]
+    # box[0] = xmin, box[1] = xmax, so
+    # x below store the x-coordinate of
+    # bbox center
     x = (box[0] + box[1])/2.0
     y = (box[2] + box[3])/2.0
     w = box[1] - box[0]
@@ -42,6 +52,7 @@ def convert_annotation(year, image_id):
         bb = convert((w,h), b)
         out_file.write(str(cls_id) + " " + " ".join([str(a) for a in bb]) + '\n')
 
+# cwd = current working dirctory
 wd = getcwd()
 
 for year, image_set in sets:
@@ -50,6 +61,16 @@ for year, image_set in sets:
     image_ids = open('VOCdevkit/VOC%s/ImageSets/Main/%s.txt'%(year, image_set)).read().strip().split()
     list_file = open('%s_%s.txt'%(year, image_set), 'w')
     for image_id in image_ids:
+        """
+        Each image has an associated annotation file named {image id}.txt.
+        The file contains one line for each object instance in the image.
+        Each line is a single spaced string in this format:
+        <class id of object instance> <x_center> <y_center> <w> <h>
+
+        The floats x_center, y_center, w, h parametrize a bounding box and
+        are scaled down with respect to the width and height of the image.
+
+        """
         list_file.write('%s/VOCdevkit/VOC%s/JPEGImages/%s.jpg\n'%(wd, year, image_id))
         convert_annotation(year, image_id)
     list_file.close()
