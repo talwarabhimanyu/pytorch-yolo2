@@ -74,8 +74,8 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
                 anchor_box = [0, 0, aw, ah]
                 iou  = bbox_iou(anchor_box, gt_box, x1y1x2y2=False)
                 if anchor_step == 4:
-                    ax = anchors[anchor_step*n+2]
-                    ay = anchors[anchor_step*n+3]
+                    ax = anchors[int(anchor_step*n+2)]
+                    ay = anchors[int(anchor_step*n+3)]
                     dist = pow(((gi+ax) - gx), 2) + pow(((gj+ay) - gy), 2)
                 if iou > best_iou:
                     best_iou = iou
@@ -93,8 +93,8 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
             conf_mask[b][best_n][gj][gi] = object_scale
             tx[b][best_n][gj][gi] = target[b][t*5+1] * nW - gi
             ty[b][best_n][gj][gi] = target[b][t*5+2] * nH - gj
-            tw[b][best_n][gj][gi] = math.log(gw/anchors[anchor_step*best_n])
-            th[b][best_n][gj][gi] = math.log(gh/anchors[anchor_step*best_n+1])
+            tw[b][best_n][gj][gi] = math.log(gw/anchors[int(anchor_step*best_n)])
+            th[b][best_n][gj][gi] = math.log(gh/anchors[int(anchor_step*best_n+1)])
             iou = bbox_iou(gt_box, pred_box, x1y1x2y2=False) # best_iou
             tconf[b][best_n][gj][gi] = iou
             tcls[b][best_n][gj][gi] = target[b][t*5]
