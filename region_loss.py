@@ -68,8 +68,9 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
             gh = target[b][t*5+4]*nH
             gt_box = [0, 0, gw, gh]
             for n in xrange(nA):
-                aw = anchors[anchor_step*n]
-                ah = anchors[anchor_step*n+1]
+                # cast indices to int
+                aw = anchors[int(anchor_step*n)]
+                ah = anchors[int(anchor_step*n+1)]
                 anchor_box = [0, 0, aw, ah]
                 iou  = bbox_iou(anchor_box, gt_box, x1y1x2y2=False)
                 if anchor_step == 4:
