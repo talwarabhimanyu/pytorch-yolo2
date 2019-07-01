@@ -165,12 +165,18 @@ class RegionLoss(nn.Module):
         tw    = Variable(tw.cuda())
         th    = Variable(th.cuda())
         tconf = Variable(tconf.cuda())
-        tcls  = Variable(tcls.view(-1)[cls_mask].long().cuda())
+        # edited the line below as per issue:
+        # https://github.com/marvis/pytorch-yolo2/issues/121
+        #tcls  = Variable(tcls.view(-1)[cls_mask].long().cuda())
+        tcls  = Variable(tcls[cls_mask == 1].view(-1).long().cuda())
 
         coord_mask = Variable(coord_mask.cuda())
         conf_mask  = Variable(conf_mask.cuda().sqrt())
         cls_mask   = Variable(cls_mask.view(-1, 1).repeat(1,nC).cuda())
-        cls        = cls[cls_mask].view(-1, nC)  
+        # edited the line below as per issue:
+        # https://github.com/marvis/pytorch-yolo2/issues/121
+        #cls        = cls[cls_mask].view(-1, nC)  
+        cls        = cls[cls_mask == 1].view(-1, nC)  
 
         t3 = time.time()
 
