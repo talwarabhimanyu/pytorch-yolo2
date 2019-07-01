@@ -146,7 +146,8 @@ class Darknet(nn.Module):
                 kernel_size = int(block['size'])
                 stride = int(block['stride'])
                 is_pad = int(block['pad'])
-                pad = (kernel_size-1)/2 if is_pad else 0
+                # cast the pad to int
+                pad = int((kernel_size-1)/2) if is_pad else 0
                 activation = block['activation']
                 model = nn.Sequential()
                 if batch_normalize:
