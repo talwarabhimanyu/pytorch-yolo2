@@ -139,10 +139,17 @@ class RegionLoss(nn.Module):
         anchor_h = torch.Tensor(self.anchors).view(nA, int(self.anchor_step)).index_select(1, torch.LongTensor([1])).cuda()
         anchor_w = anchor_w.repeat(nB, 1).repeat(1, 1, nH*nW).view(nB*nA*nH*nW)
         anchor_h = anchor_h.repeat(nB, 1).repeat(1, 1, nH*nW).view(nB*nA*nH*nW)
-        pred_boxes[0] = x.data + grid_x
-        pred_boxes[1] = y.data + grid_y
-        pred_boxes[2] = torch.exp(w.data) * anchor_w
-        pred_boxes[3] = torch.exp(h.data) * anchor_h
+        
+        # Replaced the four lines below as per issue:
+        # https://github.com/marvis/pytorch-yolo2/issues/131
+        #pred_boxes[0] = x.data + grid_x
+        #pred_boxes[1] = y.data + grid_y
+        #pred_boxes[2] = torch.exp(w.data) * anchor_w
+        #pred_boxes[3] = torch.exp(h.data) * anchor_h
+        pred_boxes[0] = torch.reshape(x.data(1,nB*nA*nH*nW)) + grid_x,
+        pred_boxes[1] = torch.reshape(y.data(1,nB*nA*nH*nW)) + grid_y
+        pred_boxes[2] = torch.reshape(torch.exp(w.data)(1,nB*nA*nH*nW)) * anchor_w
+        pred_boxes[3] = torch.reshape(torch.exp(h.data)(1,nB*nA*nH*nW)) * anchor_h
         pred_boxes = convert2cpu(pred_boxes.transpose(0,1).contiguous().view(-1,4))
         t2 = time.time()
 
