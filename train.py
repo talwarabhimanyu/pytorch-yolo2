@@ -28,13 +28,22 @@ from models.tiny_yolo import TinyYoloNet
 # Training settings
 """
 The datacfg file (e.g. voc.data) is stored in the cfg folder
-It contains 5 lines: 
+It contains 5 lines - example below:
+    train  = voc_train.txt
+    valid  = 2007_test.txt
+    names = data/voc.names
+    backup = backup
+    gpus  = 0,1,2,3
+
+
 (1) The first two lines contain the names of two .txt files
     one each for train and val. Each line of the txt files
     contains full path to an image. E.g.:
     pytorch-yolo2/VOCdevkit/VOC2007/JPEGImages/000012.jpg
 
-(2) 
+(2) The third line contains name of a file (e.g. voc.nameS)
+    each line of which contains the name of an object 
+    category.
 """
 datacfg       = sys.argv[1]
 # The cfgfile file (e.g. yolo-voc.cfg) is stored in the cfg folder
@@ -61,7 +70,8 @@ steps         = [float(step) for step in net_options['steps'].split(',')]
 scales        = [float(scale) for scale in net_options['scales'].split(',')]
 
 #Train parameters
-max_epochs    = max_batches*batch_size/nsamples+1
+# Cast to int as this number can't be fractional
+max_epochs    = int(max_batches*batch_size/nsamples)+1
 use_cuda      = True
 seed          = int(time.time())
 eps           = 1e-5
