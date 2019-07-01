@@ -26,7 +26,18 @@ from models.tiny_yolo import TinyYoloNet
 
 
 # Training settings
+"""
+The datacfg file (e.g. voc.data) is stored in the cfg folder
+It contains 5 lines: 
+(1) The first two lines contain the names of two .txt files
+    one each for train and val. Each line of the txt files
+    contains full path to an image. E.g.:
+    pytorch-yolo2/VOCdevkit/VOC2007/JPEGImages/000012.jpg
+
+(2) 
+"""
 datacfg       = sys.argv[1]
+# The cfgfile file (e.g. yolo-voc.cfg) is stored in the cfg folder
 cfgfile       = sys.argv[2]
 weightfile    = sys.argv[3]
 
