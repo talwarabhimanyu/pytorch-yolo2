@@ -273,6 +273,12 @@ def plot_boxes(img, boxes, savename=None, class_names=None):
     return img
 
 def read_truths(lab_path):
+    """
+    Reads truth labels from the annotation file of an image.
+    Each line of the file represents one object instance,
+    with data in a 5-tuple (class index, center_x, center_y,
+    w, h).
+    """
     if not os.path.exists(lab_path):
         return np.array([])
     if os.path.getsize(lab_path):
@@ -285,7 +291,10 @@ def read_truths(lab_path):
 def read_truths_args(lab_path, min_box_scale):
     truths = read_truths(lab_path)
     new_truths = []
+    # iterate over each bbox in the image
     for i in range(truths.shape[0]):
+        # if the width of bbox is less than min_box_scale
+        # then ignore the box
         if truths[i][3] < min_box_scale:
             continue
         new_truths.append([truths[i][0], truths[i][1], truths[i][2], truths[i][3], truths[i][4]])
@@ -393,7 +402,9 @@ def file_lines(thefilepath):
         buffer = thefile.read(8192*1024)
         if not buffer:
             break
-        count += buffer.count('\n')
+        # change '\n' to '\n'.encode() as per
+        # https://github.com/marvis/pytorch-yolo2/issues/112
+        count += buffer.count('\n'.encode())
     thefile.close( )
     return count
 
