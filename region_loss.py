@@ -162,7 +162,7 @@ class RegionLoss(nn.Module):
         cls_mask = (cls_mask == 1)
         # remove index of data
         #nProposals = int((conf > 0.25).sum().data[0])
-        nProposals = int((conf > 0.25).sum().data[])
+        nProposals = int((conf > 0.25).sum().data)
 
         tx    = Variable(tx.cuda())
         ty    = Variable(ty.cuda())
