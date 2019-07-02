@@ -160,7 +160,9 @@ class RegionLoss(nn.Module):
         nGT, nCorrect, coord_mask, conf_mask, cls_mask, tx, ty, tw, th, tconf,tcls = build_targets(pred_boxes, target.data, self.anchors, nA, nC, \
                                                                nH, nW, self.noobject_scale, self.object_scale, self.thresh, self.seen)
         cls_mask = (cls_mask == 1)
-        nProposals = int((conf > 0.25).sum().data[0])
+        # remove index of data
+        #nProposals = int((conf > 0.25).sum().data[0])
+        nProposals = int((conf > 0.25).sum().data[])
 
         tx    = Variable(tx.cuda())
         ty    = Variable(ty.cuda())
