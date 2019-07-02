@@ -30,11 +30,10 @@ def bbox_iou(box1, box2, x1y1x2y2=True):
         w2 = box2[2] - box2[0]
         h2 = box2[3] - box2[1]
     else:
-        print(type((box2[0]-box2[2]/2.0).float()), type((box2[0]-box2[2]/2.0)))
-        mx = min(box1[0]-box1[2]/2.0, (box2[0]-box2[2]/2.0).float())
-        Mx = max(box1[0]+box1[2]/2.0, box2[0]+box2[2]/2.0)
-        my = min(box1[1]-box1[3]/2.0, box2[1]-box2[3]/2.0)
-        My = max(box1[1]+box1[3]/2.0, box2[1]+box2[3]/2.0)
+        mx = min(box1[0]-box1[2]/2.0, (box2[0]-box2[2]/2.0).item())
+        Mx = max(box1[0]+box1[2]/2.0, (box2[0]+box2[2]/2.0).item())
+        my = min(box1[1]-box1[3]/2.0, (box2[1]-box2[3]/2.0).item())
+        My = max(box1[1]+box1[3]/2.0, (box2[1]+box2[3]/2.0).item())
         w1 = box1[2]
         h1 = box1[3]
         w2 = box2[2]
